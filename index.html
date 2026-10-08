@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="Có một bó hoa đang chờ em">
+<meta property="og:image" content="poster.jpg">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Bó Hồng Gửi Em</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Be+Vietnam+Pro:wght@300;400;500&display=swap">
+<style>
+/* Layout: one dark stage, three acts in the same spot — gift card → video → letter. Deliberately single-theme (night, glowing roses). */
+:root {
+  --night: #070a18;
+  --plum: #121b3d;
+  --rose: #ff3d8b;
+  --blush: #ffb3d1;
+  --petal: #fff1f6;
+  --muted: #a9b2d6;
+  --script: "Dancing Script", "Brush Script MT", cursive;
+  --body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body {
+  background: radial-gradient(120% 80% at 50% 20%, var(--plum) 0%, var(--night) 70%) fixed, var(--night);
+  color: var(--petal);
+  font-family: var(--body);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+main {
+  position: relative; z-index: 1;
+  min-height: 100%;
+  display: grid; place-items: center;
+  padding-inline: 16px; padding-block: 32px;
+  box-sizing: border-box;
+}
+.act { width: 100%; max-width: 720px; display: grid; justify-items: center; gap: 22px; text-align: center; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--blush); opacity: 0.85; }
+h1, .line {
+  font-family: var(--script); font-weight: 700; margin: 0; text-wrap: balance;
+  color: var(--petal);
+  text-shadow: 0 0 18px rgba(255, 61, 139, 0.55), 0 0 2px rgba(255, 179, 209, 0.9);
+}
+h1 { font-size: clamp(2.3rem, 8vw, 3.6rem); line-height: 1.1; }
+.sub { color: var(--muted); max-width: 32ch; line-height: 1.6; margin: 0; }
+button {
+  font-family: var(--body); font-size: 1rem; font-weight: 500;
+  border-radius: 999px; padding: 14px 30px; cursor: pointer;
+  border: 1px solid var(--blush); background: transparent; color: var(--petal);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button.primary { background: var(--rose); border-color: var(--rose); box-shadow: 0 0 28px rgba(255, 61, 139, 0.55); }
+button:hover { transform: translateY(-2px); }
+button:focus-visible { outline: 2px solid var(--blush); outline-offset: 4px; }
+.gift { font-size: 3.4rem; line-height: 1; filter: drop-shadow(0 0 18px rgba(255, 61, 139, 0.7)); animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-8px) rotate(-3deg); } }
+
+.frame {
+  width: 100%; max-width: 100%; aspect-ratio: 8 / 5;
+  border-radius: 18px; overflow: hidden; background: #000;
+  box-shadow: 0 0 0 1px rgba(255, 179, 209, 0.18), 0 20px 70px rgba(255, 61, 139, 0.25);
+}
+video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.skip { font-size: 0.85rem; padding: 8px 18px; border-color: rgba(255, 179, 209, 0.35); color: var(--muted); }
+
+.letter { gap: 14px; }
+.line { font-size: clamp(2rem, 7.2vw, 3.3rem); line-height: 1.2; min-height: 1.2em; }
+.line.small { font-size: clamp(1.5rem, 5vw, 2.1rem); color: var(--blush); }
+.rose-mark { font-size: 2.4rem; margin-top: 6px; }
+.choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 14px; }
+.reply { font-size: 1.05rem; color: var(--blush); line-height: 1.6; max-width: 34ch; margin: 0; }
+.fade-in { animation: fadeIn .9s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.replay { font-size: 0.85rem; padding: 8px 18px; border-color: rgba(255, 179, 209, 0.35); color: var(--muted); margin-top: 10px; }
+@media (prefers-reduced-motion: reduce) {
+  .gift { animation: none; }
+  .fade-in { animation: none; }
+  button { transition: none; }
+}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<main>
+  <section class="act" id="intro">
+    <div class="gift" aria-hidden="true">🎁</div>
+    <span class="eyebrow">Gửi em</span>
+    <h1>Có một bó hoa đang chờ em</h1>
+    <p class="sub">Mở to âm lượng một chút nhé. Xem hết đoạn video, có điều anh muốn nói.</p>
+    <button class="primary" id="open">Mở quà ♥</button>
+  </section>
+
+  <section class="act" id="stage" hidden>
+    <div class="frame"><video id="vid" src="hoa.mp4" poster="poster.jpg" playsinline preload="auto"></video></div>
+    <button class="skip" id="skip">Bỏ qua</button>
+  </section>
+
+  <section class="act letter" id="letter" hidden>
+    <span class="eyebrow fade-in">Điều anh muốn nói</span>
+    <p class="line" id="l1"></p>
+    <p class="line small" id="l2"></p>
+    <div class="rose-mark" id="mark" hidden aria-hidden="true">🌹</div>
+    <div class="choices" id="choices" hidden>
+      <button class="primary" id="yes">Đồng ý ♥</button>
+      <button id="think">Cho em suy nghĩ thêm</button>
+    </div>
+    <p class="reply" id="reply" hidden></p>
+    <button class="replay" id="replay" hidden>Xem lại bó hoa</button>
+  </section>
+</main>
+
+<script>
+const LINE1 = "Anh thích em lâu rồi";
+const LINE2 = "Làm người yêu anh nhé?";
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- ambient petals & hearts ---------- */
+const cv = $('sky'), cx = cv.getContext('2d');
+let W, H, bits = [], burst = [];
+function size() { W = cv.width = innerWidth * devicePixelRatio; H = cv.height = innerHeight * devicePixelRatio; }
+addEventListener('resize', size); size();
+function mk(y) {
+  return { x: Math.random() * W, y: y ?? Math.random() * H, s: (4 + Math.random() * 9) * devicePixelRatio,
+    v: (0.25 + Math.random() * 0.7) * devicePixelRatio, w: Math.random() * 6.28, heart: Math.random() < 0.45,
+    a: 0.25 + Math.random() * 0.5 };
+}
+for (let i = 0; i < 46; i++) bits.push(mk());
+function heart(x, y, s) {
+  cx.beginPath();
+  for (let t = 0; t <= 6.3; t += 0.3) {
+    const hx = 16 * Math.sin(t) ** 3, hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+    t === 0 ? cx.moveTo(x + hx * s / 16, y + hy * s / 16) : cx.lineTo(x + hx * s / 16, y + hy * s / 16);
+  }
+  cx.fill();
+}
+function petal(x, y, s, r) {
+  cx.save(); cx.translate(x, y); cx.rotate(r);
+  cx.beginPath(); cx.ellipse(0, 0, s * 0.55, s, 0, 0, 6.3); cx.fill(); cx.restore();
+}
+function frame() {
+  cx.clearRect(0, 0, W, H);
+  for (const b of bits) {
+    b.y += b.v; b.w += 0.012; b.x += Math.sin(b.w) * 0.4 * devicePixelRatio;
+    if (b.y > H + 20) Object.assign(b, mk(-20));
+    cx.fillStyle = b.heart ? `rgba(255,140,190,${b.a})` : `rgba(255,61,139,${b.a * 0.8})`;
+    b.heart ? heart(b.x, b.y, b.s) : petal(b.x, b.y, b.s, b.w);
+  }
+  for (let i = burst.length - 1; i >= 0; i--) {
+    const p = burst[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.06 * devicePixelRatio; p.life -= 0.012;
+    if (p.life <= 0) { burst.splice(i, 1); continue; }
+    cx.fillStyle = `rgba(${p.c},${p.life})`; heart(p.x, p.y, p.s);
+  }
+  requestAnimationFrame(frame);
+}
+if (!reduce) requestAnimationFrame(frame);
+function celebrate() {
+  if (reduce) return;
+  const cols = ['255,61,139', '255,179,209', '255,255,255'];
+  for (let i = 0; i < 120; i++) {
+    const a = Math.random() * 6.28, sp = (2 + Math.random() * 7) * devicePixelRatio;
+    burst.push({ x: W / 2, y: H * 0.45, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 3 * devicePixelRatio,
+      s: (6 + Math.random() * 10) * devicePixelRatio, life: 1, c: cols[i % 3] });
+  }
+}
+
+/* ---------- acts ---------- */
+const vid = $('vid');
+function show(id) { for (const s of ['intro', 'stage', 'letter']) $(s).hidden = s !== id; }
+
+$('open').addEventListener('click', async () => {
+  show('stage');
+  vid.currentTime = 0;
+  try { vid.muted = false; await vid.play(); }
+  catch { vid.muted = true; try { await vid.play(); } catch { reveal(); } }
+});
+$('skip').addEventListener('click', () => { vid.pause(); reveal(); });
+vid.addEventListener('ended', reveal);
+vid.addEventListener('error', reveal);
+
+let revealing = false;
+async function type(el, text, speed) {
+  if (reduce) { el.textContent = text; return; }
+  el.textContent = '';
+  for (const ch of text) { el.textContent += ch; await new Promise(r => setTimeout(r, speed)); }
+}
+async function reveal() {
+  if (revealing) return; revealing = true;
+  show('letter');
+  ['mark', 'choices', 'reply', 'replay'].forEach(id => $(id).hidden = true);
+  await new Promise(r => setTimeout(r, 500));
+  await type($('l1'), LINE1, 85);
+  await new Promise(r => setTimeout(r, 450));
+  await type($('l2'), LINE2, 85);
+  $('mark').hidden = false; $('mark').classList.add('fade-in');
+  setTimeout(() => { $('choices').hidden = false; $('choices').classList.add('fade-in'); }, 500);
+  revealing = false;
+}
+function answer(msg, party) {
+  $('choices').hidden = true;
+  $('reply').textContent = msg; $('reply').hidden = false; $('reply').classList.add('fade-in');
+  $('replay').hidden = false;
+  if (party) celebrate();
+}
+$('yes').addEventListener('click', () => answer('Anh vui lắm! Nhắn cho anh một tin nhé, anh đang đợi ♥', true));
+$('think').addEventListener('click', () => answer('Không sao đâu, em cứ từ từ. Anh vẫn ở đây đợi em ♥', false));
+$('replay').addEventListener('click', () => { $('l1').textContent = ''; $('l2').textContent = ''; $('open').click(); });
+</script>
+
+</body></html>
